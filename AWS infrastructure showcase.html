@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AWS infrastructure showcase | Alberto S. Payabyab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--bg:#f3f6fb;--sf:#fff;--ink:#0f1a30;--mu:#566480;--ln:#d7deec;--ac:#1f5eff;--acs:#e6edff;--pv:#0a7c5a;--pvs:#e3f5ee;--ok:#0a8f5c;--wn:#9a6700;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1322;--sf:#121c32;--ink:#e8edf6;--mu:#93a1ba;--ln:#23304f;--ac:#6aa6ff;--acs:#16264a;--pv:#3ddc97;--pvs:#10302a;--ok:#3ddc97;--wn:#e3b341;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1322;--sf:#121c32;--ink:#e8edf6;--mu:#93a1ba;--ln:#23304f;--ac:#6aa6ff;--acs:#16264a;--pv:#3ddc97;--pvs:#10302a;--ok:#3ddc97;--wn:#e3b341;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(38px,6.5vw,68px);line-height:1.03;font-weight:800;letter-spacing:-.04em;max-width:15ch}
+h2{font-size:clamp(26px,3.6vw,36px);font-weight:700;margin-bottom:8px}
+h3{font-size:20px;font-weight:700}
+h4{font-size:14px;font-weight:600;color:var(--mu);margin-bottom:4px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px 40px}
+.mu{color:var(--mu)}
+.lead{font-size:clamp(17px,2vw,21px);line-height:1.5;max-width:50ch;margin:18px 0 6px;color:var(--mu)}
+.hero{padding:64px 0 24px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-block;border:1px solid var(--ln);background:var(--sf);border-radius:10px;padding:9px 16px;font:500 14px "IBM Plex Mono",monospace;text-decoration:none}
+.btn:hover{border-color:var(--ac)}
+.btn.p{background:var(--ac);border-color:var(--ac);color:var(--bg)}
+section{padding-top:56px}
+.hint{margin:0 0 20px}
+button{font:inherit;color:inherit;text-align:left;cursor:pointer}
+.flow,.private{display:flex;gap:30px;align-items:stretch}
+.n{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:14px}
+.n b,.card b{font:700 16px "Bricolage Grotesque",sans-serif}
+.n span{font-size:13px;color:var(--mu);line-height:1.4}
+.plain{background:none;border-style:dashed;justify-content:center}
+.n::after{content:"";position:absolute;right:-21px;top:50%;width:9px;height:9px;border-top:2px solid var(--mu);border-right:2px solid var(--mu);transform:translateY(-50%) rotate(45deg)}
+.private .n:last-child::after{display:none}
+.private{flex:2;position:relative;border:1px dashed var(--pv);background:var(--pvs);border-radius:14px;padding:34px 14px 14px}
+.private::before{content:"Private subnets";position:absolute;top:9px;left:14px;font-size:12px;color:var(--pv)}
+[aria-pressed="true"]{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
+button.n:hover,.card:hover,.chip:hover{border-color:var(--ac)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.chip{border:1px solid var(--ln);background:var(--sf);border-radius:99px;padding:4px 14px;font-size:14px}
+.panel{margin-top:18px;background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:22px}
+.ph{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cols p{margin:0;font-size:15px}
+.bdg{font-size:12px;border:1px solid;border-radius:99px;padding:0 10px;white-space:nowrap}
+.za{color:var(--ac);border-color:var(--ac)}.zp{color:var(--pv);border-color:var(--pv)}.zn{color:var(--mu);border-color:var(--mu)}
+.ok{color:var(--ok);border-color:var(--ok)}.pe{color:var(--wn);border-color:var(--wn)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{display:flex;flex-direction:column;gap:6px;align-items:flex-start;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:16px}
+.card span:last-child{font-size:13px;color:var(--mu);line-height:1.45}
+.status{list-style:none;margin:16px 0 0;padding:0;border:1px solid var(--ln);border-radius:14px;background:var(--sf)}
+.status li{display:flex;gap:14px;align-items:center;padding:13px 18px;border-bottom:1px solid var(--ln)}
+.status li:last-child{border:0}
+.status .bdg{min-width:74px;text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.two a{text-decoration:none;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:18px;display:block}
+.two a:hover{border-color:var(--ac)}
+.two b{display:block;font:700 18px "Bricolage Grotesque",sans-serif}
+footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--ln);color:var(--mu);font-size:14px}
+@media (max-width:900px){
+.flow,.private{flex-direction:column}
+.n::after{right:auto;left:50%;top:auto;bottom:-22px;transform:translateX(-50%) rotate(135deg)}
+.cols,.two{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.hero{padding-top:40px}}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="hero">
+<h1>AWS infrastructure, written as code</h1>
+<p class="lead">Two CloudFormation projects: a secure account baseline, and a hosting setup with a firewall, load balancer, Auto Scaling and a private database.</p>
+<div class="row">
+<a class="btn p" href="https://github.com/alsantospyab-art/aws-secure-baseline">aws-secure-baseline</a>
+<a class="btn p" href="https://github.com/alsantospyab-art/aws-hosting-reference">aws-hosting-reference</a>
+<a class="btn" href="#status">Project status</a>
+</div>
+</header>
+
+<section id="hosting">
+<h2>Hosting reference: follow one request</h2>
+<p class="mu hint">Select any tool to see what it does, how the repo sets it up, and why it matters.</p>
+<div class="flow">
+<div class="n plain"><b>User</b><span>Opens the site</span></div>
+<button class="n" data-id="r53" data-p="ph" aria-pressed="false"><b>Route 53</b><span>Name to load balancer</span></button>
+<button class="n" data-id="waf" data-p="ph" aria-pressed="false"><b>AWS WAF</b><span>Blocked requests get 403</span></button>
+<button class="n" data-id="alb" data-p="ph" aria-pressed="false"><b>Load balancer</b><span>Public subnets, two zones</span></button>
+<div class="private">
+<button class="n" data-id="asg" data-p="ph" aria-pressed="false"><b>Auto Scaling</b><span>2 to 4 web servers</span></button>
+<button class="n" data-id="rds" data-p="ph" aria-pressed="false"><b>PostgreSQL</b><span>Private and encrypted</span></button>
+</div>
+</div>
+<div class="chips"><span class="mu">Also in the stack:</span>
+<button class="chip" data-id="sg" data-p="ph" aria-pressed="false">Security groups</button>
+<button class="chip" data-id="acm" data-p="ph" aria-pressed="false">ACM certificate</button>
+<button class="chip" data-id="sec" data-p="ph" aria-pressed="false">Secrets Manager</button>
+<button class="chip" data-id="iam" data-p="ph" aria-pressed="false">IAM instance role</button>
+<button class="chip" data-id="cfn" data-p="ph" aria-pressed="false">CloudFormation</button>
+</div>
+<div class="panel" id="ph" aria-live="polite"></div>
+</section>
+
+<section id="baseline">
+<h2>Secure baseline: what the account starts with</h2>
+<p class="mu hint">The foundation the hosting project is built on. Select a tool for details.</p>
+<div class="grid" id="bgrid"></div>
+<div class="panel" id="pb" aria-live="polite"></div>
+</section>
+
+<section id="status">
+<h2>Where the project stands</h2>
+<ul class="status">
+<li><span class="bdg ok">Done</span>CloudFormation templates written for both projects</li>
+<li><span class="bdg ok">Done</span>Template checks (cfn-lint) set up to run on every push</li>
+<li><span class="bdg pe">Pending</span>Deployed once in a test AWS account</li>
+<li><span class="bdg pe">Pending</span>Test evidence: WAF block, self-healing server, private database</li>
+</ul>
+<p class="mu">This list is updated as each step is finished. Nothing is marked done until it has been run.</p>
+</section>
+
+<section id="more">
+<h2>Also built</h2>
+<div class="two">
+<a href="https://alsantospyab-art.github.io/crud/"><b>Bug tracker</b><span class="mu">Board and list views, status, priority, severity and comments.</span></a>
+<a href="https://alsantospyab-art.github.io/portfolio/"><b>Developer portfolio</b><span class="mu">Next.js site with skills, experience and an API playground.</span></a>
+</div>
+</section>
+
+<footer>Alberto S. Payabyab · Pampanga, Philippines · <a href="mailto:al.santospayab@gmail.com">al.santospayab@gmail.com</a></footer>
+</main>
+<script>
+const T={
+r53:["Route 53","Edge","a","Points the domain name at the load balancer.","Optional alias record, created only when you pass a domain name and hosted zone.","A stable, friendly name with no IP addresses to manage."],
+waf:["AWS WAF","Edge","a","Inspects every request before it reaches the app.","A web ACL with a per-IP rate limit plus the AWS Common and Known Bad Inputs rule groups.","Floods and common attacks such as XSS are stopped with a 403."],
+alb:["Application Load Balancer","Edge","a","Spreads traffic across healthy servers in two zones.","Internet-facing in public subnets, health checks on the home page, HTTP redirects to HTTPS when a domain is set.","Servers never face the internet directly."],
+asg:["Auto Scaling and EC2","Compute","p","Keeps 2 to 4 web servers running and replaces failed ones.","A launch template with IMDSv2 required and encrypted disks, CPU target tracking at 50%, and load balancer health checks.","The site heals and scales without anyone watching it."],
+rds:["RDS PostgreSQL","Data","p","Managed database for application data.","Private subnets, encrypted storage, not publicly accessible, password generated by AWS.","Only the web servers can connect, and no password sits in code."],
+sg:["Security groups","Access","n","Three chained firewalls around the stack.","Internet to load balancer on 80 and 443, load balancer to servers on 80, servers to database on 5432.","Each layer accepts traffic only from the layer in front of it."],
+acm:["ACM certificate","Edge","a","A free TLS certificate for the domain.","Requested with DNS validation through Route 53 when a domain is set.","Encrypted traffic, validated automatically."],
+sec:["Secrets Manager","Data","p","Stores the database password.","RDS creates and manages the master password and keeps it in Secrets Manager.","No credentials in the template or in Git."],
+iam:["IAM instance role","Access","n","Gives the servers permission to use AWS.","Only the Systems Manager managed policy is attached, and no access keys are stored.","Servers use a role instead of stored keys."],
+cfn:["CloudFormation","Ops","n","Describes the whole stack as code.","One template, templates/hosting.yaml, checked by cfn-lint on every push.","Repeatable and reviewable, and it can be deleted in one command."],
+vpc:["VPC and subnets","Network","a","A private network for everything else.","10.20.0.0/16 with two public and two private subnets across two zones. No public IPs by default.","Workloads start isolated."],
+s3ep:["S3 gateway endpoint","Network","a","A free path to S3 from private subnets.","Attached to the private route table.","S3 is reachable without the internet or a NAT gateway."],
+nat:["NAT gateway (optional)","Network","a","Lets private subnets reach the internet.","Off by default behind a parameter.","Avoids a surprise hourly charge."],
+flow:["VPC flow logs","Logging","n","Records network traffic metadata.","Rejected traffic only, sent to CloudWatch Logs with 14-day retention.","See blocked attempts at low cost."],
+trail:["CloudTrail","Logging","n","Records every API call in the account.","Multi-region trail with log file validation turned on.","A tamper-evident history of who did what."],
+bucket:["Encrypted S3 log bucket","Data","p","Stores the CloudTrail logs.","Versioned, public access blocked, HTTPS only, a bucket policy scoped to this trail, 90-day expiry.","Audit logs cannot be exposed or grow forever."],
+auditor:["Read-only IAM role","Access","n","A role for security reviewers.","SecurityAudit and ViewOnlyAccess policies, and assuming it requires MFA.","Reviewers can look but not change anything."],
+billing:["Billing alarm","Cost","n","Emails you when estimated charges pass a limit.","CloudWatch alarm and SNS topic in a separate us-east-1 template, $5 by default.","Catches surprise charges early."]};
+const BASE=["vpc","s3ep","nat","flow","trail","bucket","auditor","billing"];
+document.getElementById("bgrid").innerHTML=BASE.map(k=>{const t=T[k];return `<button class="card" data-id="${k}" data-p="pb" aria-pressed="false"><span class="bdg z${t[2]}">${t[1]}</span><b>${t[0]}</b><span>${t[3]}</span></button>`}).join("");
+function show(id,p){const t=T[id];document.getElementById(p).innerHTML=`<div class="ph"><h3>${t[0]}</h3><span class="bdg z${t[2]}">${t[1]}</span></div><div class="cols"><div><h4>What it does</h4><p>${t[3]}</p></div><div><h4>How the repo sets it up</h4><p>${t[4]}</p></div><div><h4>Why it matters</h4><p>${t[5]}</p></div></div>`;document.querySelectorAll(`[data-p="${p}"]`).forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.id===id)))}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b)show(b.dataset.id,b.dataset.p)});
+show("waf","ph");show("vpc","pb");
+</script>
+</body>
+</html>
